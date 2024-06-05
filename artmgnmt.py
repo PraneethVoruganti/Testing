@@ -193,4 +193,19 @@ def list_files_in_s3_folder(s3_path):
     
     return file_names
 """**************************************************************************"""
+def upload_logsfolder_to_s3(local_folder_path, s3_log_url):
+    """
+    Uploads all files in a local folder to the specified S3 base URL.
 
+    Parameters:
+    local_folder_path (str): The local path of the folder whose contents will be uploaded.
+    s3_base_url (str): The base S3 URL where the files will be uploaded.
+    """
+    for root, dirs, files in os.walk(local_folder_path):
+        for file_name in files:
+            local_path = os.path.join(root, file_name)
+            # Construct the S3 URL for this file
+            s3_url = f"{s3_log_url}/{os.path.relpath(local_path, local_folder_path)}"
+            upload_to_s3(local_path, s3_url)
+    
+"""*************************************************************************************"""
